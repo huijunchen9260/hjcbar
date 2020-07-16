@@ -1,0 +1,34 @@
+#!/bin/sh
+
+playicon=""
+TMP="/tmp/hjcbar-tmp"
+
+case "$1" in
+    35) kill -35 $(pidof -x hjcbar.sh) && exit 0 ;;
+    36) kill -36 $(pidof -x hjcbar.sh) && exit 0 ;;
+    37) kill -37 $(pidof -x hjcbar.sh) && exit 0 ;;
+    38) kill -38 $(pidof -x hjcbar.sh) && exit 0 ;;
+    39) kill -39 $(pidof -x hjcbar.sh) && exit 0 ;;
+esac
+
+while :; do
+    for i in $(printf '%d' "$(date +%S)"); do
+	# musictime
+	[ "$(cat -u  "$TMP/status")" = "$playicon" ] && kill -38 $(pidof -x hjcbar.sh)
+	# system
+	kill -41 $(pidof -x hjcbar.sh)
+	case "$i" in
+	    # time
+	    0) kill -40 $(pidof -x hjcbar.sh) ;;
+	    *)
+		case "$((i%10))" in
+		    # network
+		    0) kill -39 $(pidof -x hjcbar.sh) ;;
+		    # battery
+		    5) kill -42 $(pidof -x hjcbar.sh) ;;
+		esac
+	    ;;
+	esac
+	sleep 1
+    done
+done
